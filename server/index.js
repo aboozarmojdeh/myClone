@@ -29,8 +29,12 @@ app.use('/api/v1/models',require("./routes/models"))
 // main page route
 // app.use('/',require("./routes/home"))
 
-// question routes
+// questions routes
 app.use('/api/v1/questions',require("./routes/questions"))
+
+
+// answeredquestions routes
+app.use('/api/v1/answeredquestions',require("./routes/answeredquestions"))
 
 
 
