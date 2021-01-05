@@ -1,0 +1,57 @@
+CREATE TABLE users(
+    user_id BIGSERIAL NOT NULL PRIMARY KEY,
+    user_name VARCHAR(255) NOT NULL,
+    user_email VARCHAR(255) NOT NULL,
+    user_password VARCHAR(255) NOT NULL
+);
+
+INSERT INTO users (user_name,user_email,user_password) VALUES ('Aboozar Mojdeh','aboozar.mojdeh@gmail.com','123');
+INSERT INTO users (user_name,user_email,user_password) VALUES ('Elmira Ghabbaz','e.ghabbaz@gmail.com','123');
+INSERT INTO users (user_name,user_email,user_password) VALUES ('Pooria Mojdeh','pooria@gmail.com','123');
+
+CREATE TABLE questions (
+	question_id BIGSERIAL PRIMARY KEY,
+	question_text VARCHAR (50),
+        answer_text VARCHAR (50)
+);
+
+INSERT INTO questions (question_text,answer_text) VALUES ('What is your favourite color?','empty');
+INSERT INTO questions (question_text,answer_text) VALUES ('What is your favourite car?', 'empty');
+INSERT INTO questions (question_text,answer_text) VALUES ('What is your favourite blood group?', 'empty');
+INSERT INTO questions (question_text,answer_text) VALUES ('What is your first hobby?', 'empty');
+INSERT INTO questions (question_text,answer_text) VALUES ('What was your favorite age growing up?', 'empty');
+INSERT INTO questions (question_text,answer_text) VALUES ('What was the last thing you read?', 'empty');
+
+CREATE TABLE answeredquestions (
+	answeredquestion_id BIGSERIAL NOT NULL PRIMARY KEY,
+        foreign_user_id BIGINT NOT NULL REFERENCES users(user_id) on delete cascade on update cascade,
+        question_text VARCHAR(255) NOT NULL,
+        answer_text VARCHAR(255) NOT NULL,
+        is_answered BOOL NOT NULL DEFAULT 'f'
+);
+
+INSERT INTO answeredquestions (foreign_user_id,question_text,answer_text, is_answered) VALUES (1,'What is your favourite color?','blue','f');
+INSERT INTO answeredquestions (foreign_user_id,question_text,answer_text, is_answered) VALUES (2,'What is your favourite car?', 'benz','f');
+INSERT INTO answeredquestions (foreign_user_id,question_text,answer_text, is_answered) VALUES (3,'What is your favourite blood group?', 'o+','f');
+INSERT INTO answeredquestions (foreign_user_id,question_text,answer_text, is_answered) VALUES (3,'What was the last thing you read?', 'o+','f');
+
+
+
+
+
+-- select * from users;
+-- select * from questions;
+-- select * from answeredquestions;
+SELECT
+	question_text,
+	
+	'not in answeredquestions' AS note
+FROM
+	questions
+EXCEPT
+	SELECT
+	question_text,
+		
+		'not in answeredquestions' AS note
+	FROM
+		answeredquestions;
