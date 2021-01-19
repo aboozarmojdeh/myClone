@@ -26,13 +26,14 @@ router.get('/:id',async (req,res)=>{
     }
 });
 
-// create an answeredquestions
-router.post('/',async (req,res)=>{
+
+// create an answered questions
+router.post('/answered',async (req,res)=>{
     try {
        
-    const {foreign_user_id,question_text,answer_text}=req.body;
-      const newQuestion=await pool.query('INSERT INTO answeredquestions (foreign_user_id,question_text,answer_text) VALUES($1,$2,$3) RETURNING *',[foreign_user_id,question_text,answer_text]);
-      res.json(newQuestion.rows[0])  
+    const {foreign_user_id,question_text,answer_text,is_answered}=req.body;
+      const answeredQuestion=await pool.query('INSERT INTO answeredquestions (foreign_user_id,question_text,answer_text, is_answered) VALUES ($1,$2,$3,$4) RETURNING *',[foreign_user_id,question_text,answer_text,is_answered]);
+      res.json(answeredQuestion.rows[0])  
     } catch (err) {
         console.error(err.message)
     }

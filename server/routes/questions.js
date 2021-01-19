@@ -14,9 +14,12 @@ router.get('/',async (req,res)=>{
 });
 
 // Get un answered questions
-router.get('/unanswered',async (req,res)=>{
+router.get('/unanswered/:id',async (req,res)=>{
     try {
-      const unAnsweredQuestions=await pool.query('SELECT * FROM questions WHERE is_answered=$1',[false]);
+        const {id}=req.params;
+        console.log('id',id)
+      const unAnsweredQuestions=await pool.query(`SELECT question_text FROM questions EXCEPT ALL SELECT question_text FROM answeredquestions where foreign_user_id=$1`,[id]);
+      console.log(unAnsweredQuestions.rows)
       res.json(unAnsweredQuestions.rows)  
     } catch (err) {
         console.error(err.message)

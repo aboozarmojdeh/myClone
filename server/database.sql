@@ -38,18 +38,20 @@ INSERT INTO users (user_name,user_email,user_password) VALUES ('test','test@gmai
 CREATE TABLE questions (
 	question_id BIGSERIAL PRIMARY KEY,
 	question_text VARCHAR (50),
-        answer_text VARCHAR (50)
+    answer_text VARCHAR (50)
 );
+
 INSERT INTO questions (question_text,answer_text) VALUES ('What is your favourite color?','empty');
 INSERT INTO questions (question_text,answer_text) VALUES ('What is your favourite car?', 'empty');
 INSERT INTO questions (question_text,answer_text) VALUES ('What is your favourite blood group?', 'empty');
 INSERT INTO questions (question_text,answer_text) VALUES ('What is your first hobby?', 'empty');
 INSERT INTO questions (question_text,answer_text) VALUES ('What was your favorite age growing up?', 'empty');
 INSERT INTO questions (question_text,answer_text) VALUES ('What was the last thing you read?', 'empty');
+INSERT INTO questions (question_text,answer_text) VALUES ('What is your favorite fruit?', 'empty');
 
 
 CREATE TABLE answeredquestions (
-	answeredquestion_id BIGSERIAL NOT NULL PRIMARY KEY,
+	    answeredquestion_id BIGSERIAL NOT NULL PRIMARY KEY,
         foreign_user_id BIGINT NOT NULL REFERENCES users(user_id) on delete cascade on update cascade,
         question_text VARCHAR(255) NOT NULL,
         answer_text VARCHAR(255) NOT NULL,
@@ -57,9 +59,38 @@ CREATE TABLE answeredquestions (
 );
 
 INSERT INTO answeredquestions (foreign_user_id,question_text,answer_text, is_answered) VALUES (1,'What is your favourite color?','blue','f');
-INSERT INTO answeredquestions (foreign_user_id,question_text,answer_text, is_answered) VALUES (2,'What is your favourite car?', 'benz','f');
-INSERT INTO answeredquestions (foreign_user_id,question_text,answer_text, is_answered) VALUES (3,'What is your favourite blood group?', 'o+','f');
-INSERT INTO answeredquestions (foreign_user_id,question_text,answer_text, is_answered) VALUES (3,'What was the last thing you read?', 'o+','f');
+INSERT INTO answeredquestions (foreign_user_id,question_text,answer_text, is_answered) VALUES (1,'What is your favourite car?', 'benz','f');
+INSERT INTO answeredquestions (foreign_user_id,question_text,answer_text, is_answered) VALUES (1,'What is your favourite blood group?', 'o+','f');
+INSERT INTO answeredquestions (foreign_user_id,question_text,answer_text, is_answered) VALUES (2,'What was the last thing you read?', 'o+','f');
+INSERT INTO answeredquestions (foreign_user_id,question_text,answer_text, is_answered) VALUES (2,'What is your favourite blood group?', 'o+','f');
+INSERT INTO answeredquestions (foreign_user_id,question_text,answer_text, is_answered) VALUES (2,'What is your favourite color?', 'o+','f');
+INSERT INTO answeredquestions (foreign_user_id,question_text,answer_text, is_answered) VALUES (3,'What is your favourite color?','blue','f');
+
+
+CREATE TABLE models (
+    id BIGSERIAL NOT NULL PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    location VARCHAR(50) NOT NULL,
+    photo_path VARCHAR(50),
+    rank_range INT NOT NULL CHECK(rank_range >=1 AND rank_range <= 5)
+);
+INSERT INTO models (name,location,photo_path,rank_range) VALUES ('Jenifer Lopez','richmond hill','/uploads/img1.jpg',5);
+INSERT INTO models (name,location,photo_path,rank_range) VALUES ('Serena Williams','Thorn hill','/uploads/img2.jpg',3);
+
+CREATE TABLE reviews (
+    id BIGSERIAL NOT NULL PRIMARY KEY,
+    model_id BIGINT NOT NULL REFERENCES models(id) on delete cascade on update cascade,
+    name VARCHAR(50) NOT NULL,
+   review TEXT NOT NULL,
+    rating INT NOT NULL CHECK(rating >=1 AND rating<=5 )
+);
+INSERT INTO reviews (model_id,name,review,rating) VALUES (1,'aboozar','perfect body shape',3);
+
+
+-- SELECT * FROM questions FULL OUTER JOIN answeredquestions USING (question_text) WHERE questions.question_text=answeredquestions.question_text;
+SELECT question_text FROM questions EXCEPT ALL SELECT question_text FROM answeredquestions where foreign_user_id=1;
+
+
 
 -- INSERT INTO answeredquestions (foreign_user_id,question_text,answer_text, is_answered) VALUES (1,'What is your favourite color?','empty','f');
 -- INSERT INTO answeredquestions (foreign_user_id,question_text,answer_text, is_answered) VALUES (2,'What is your favourite car?', 'empty','f');
@@ -263,25 +294,3 @@ INSERT INTO answeredquestions (foreign_user_id,question_text,answer_text, is_ans
 -- INSERT INTO question (foreign_user_id,question_text,answer_text, is_answered) VALUES (2,'What was the first thing you wanted to be when you grew up?', 'empty','f');
 -- INSERT INTO question (foreign_user_id,question_text,answer_text, is_answered) VALUES (3,'If you could own a mythical creature (unicorn, phoenix, etc.), which one would you pick?','empty','f');
 -- INSERT INTO question (foreign_user_id,question_text,answer_text, is_answered) VALUES (4,'What is your least favorite place in the world?','empty','f');
-
-
-
-CREATE TABLE models (
-    id BIGSERIAL NOT NULL PRIMARY KEY,
-    name VARCHAR(50) NOT NULL,
-    location VARCHAR(50) NOT NULL,
-    photo_path VARCHAR(50),
-    rank_range INT NOT NULL CHECK(rank_range >=1 AND rank_range <= 5)
-);
-INSERT INTO models (name,location,photo_path,rank_range) VALUES ('Jenifer Lopez','richmond hill','/uploads/img1.jpg',5);
-INSERT INTO models (name,location,photo_path,rank_range) VALUES ('Serena Williams','Thorn hill','/uploads/img2.jpg',3);
-
-CREATE TABLE reviews (
-    id BIGSERIAL NOT NULL PRIMARY KEY,
-    model_id BIGINT NOT NULL REFERENCES models(id) on delete cascade on update cascade,
-    name VARCHAR(50) NOT NULL,
-   review TEXT NOT NULL,
-    rating INT NOT NULL CHECK(rating >=1 AND rating<=5 )
-);
-INSERT INTO reviews (model_id,name,review,rating) VALUES (1,'aboozar','perfect body shape',3);
-

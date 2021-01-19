@@ -4,8 +4,10 @@ import modelPic from "../img/modelPic.png";
 // import Home from './Home';
 import AddModel from './AddModel';
 import ModelList from './ModelList';
+import QuestionForm from './QuestionForm';
 const Home = ({ setAuth }) => {
   const [name, setName] = useState("");
+  const [id,setId]=useState("");
   const [modelName, setModelName] = useState("");
   const [superModels, setSuperModels] = useState([]);
 
@@ -16,8 +18,9 @@ const Home = ({ setAuth }) => {
         headers: { token: localStorage.token },
       });
       const parsRes = await response.json();
-      console.log(parsRes);
+      console.log('parseRes',parsRes);
       setName(parsRes.user_name);
+      setId(parsRes.user_id)
     } catch (err) {
       console.error(err.message);
     }
@@ -132,7 +135,7 @@ const Home = ({ setAuth }) => {
         {superModels.length === 0 && <p>No results found</p>}
       </div> */}
       <hr />
-      
+      <QuestionForm id={id} />
     </Fragment>
   );
 };
